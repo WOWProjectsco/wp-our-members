@@ -17,7 +17,9 @@
 * @since 1.0.0
 */
 
-
+require_once( 'classes/class-wowprojects-our-members.php' );
+require_once( 'classes/class-wowprojects-our-members-taxonomy.php' );
+require_once( 'classes/class-wowprojects-our-members-additional-fields.php' );
 
 /**
  * Tell WordPress to load a translation file if it exists for the user's language

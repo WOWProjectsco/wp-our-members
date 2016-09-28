@@ -64,7 +64,7 @@ class WOWProjects_Our_Members_Post_Type {
 			"hierarchical" 			=> false,
 			"rewrite" 				=> array( "slug" => "member", "with_front" => true ),
 			"query_var" 			=> true,
-			"menu_position" 		=> 10,"menu_icon" => "dashicons-image-filter",
+			"menu_position" 		=> 7,"menu_icon" => "dashicons-image-filter",
 			"supports" 				=> array( "title", "editor", "thumbnail", "excerpt", "revisions", "page-attributes" ),		
 			"taxonomies" 			=> array( "service" ),
 				);

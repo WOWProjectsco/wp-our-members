@@ -45,6 +45,11 @@ class WOWProjects_Our_Members_Custom_Fields {
 			'label' => 'Website',
 			'type' => 'url',
 		),
+		array(
+			'id' => 'header-image',
+			'label' => 'Header image',
+			'type' => 'media',
+		)
 	);
 
 	/**
@@ -52,6 +57,7 @@ class WOWProjects_Our_Members_Custom_Fields {
 	 */
 	public function __construct() {
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
+		add_action( 'admin_footer', array( $this, 'admin_footer' ) );
 		add_action( 'save_post', array( $this, 'save_post' ) );
 	}
 
@@ -83,6 +89,40 @@ class WOWProjects_Our_Members_Custom_Fields {
 	}
 
 	/**
+	 * Hooks into WordPress' admin_footer function.
+	 * Adds scripts for media uploader.
+	 */
+	public function admin_footer() {
+		?><script>
+			// https://codestag.com/how-to-use-wordpress-3-5-media-uploader-in-theme-options/
+			jQuery(document).ready(function($){
+				if ( typeof wp.media !== 'undefined' ) {
+					var _custom_media = true,
+					_orig_send_attachment = wp.media.editor.send.attachment;
+					$('.rational-metabox-media').click(function(e) {
+						var send_attachment_bkp = wp.media.editor.send.attachment;
+						var button = $(this);
+						var id = button.attr('id').replace('_button', '');
+						_custom_media = true;
+							wp.media.editor.send.attachment = function(props, attachment){
+							if ( _custom_media ) {
+								$("#"+id).val(attachment.url);
+							} else {
+								return _orig_send_attachment.apply( this, [props, attachment] );
+							};
+						}
+						wp.media.editor.open(button);
+						return false;
+					});
+					$('.add_media').on('click', function(){
+						_custom_media = false;
+					});
+				}
+			});
+		</script><?php
+	}
+
+	/**
 	 * Generates the field's HTML for the meta box.
 	 */
 	public function generate_fields( $post ) {
@@ -91,6 +131,16 @@ class WOWProjects_Our_Members_Custom_Fields {
 			$label = '<label for="' . $field['id'] . '">' . $field['label'] . '</label>';
 			$db_value = get_post_meta( $post->ID, 'additional_member_fields_' . $field['id'], true );
 			switch ( $field['type'] ) {
+				case 'media':
+					$input = sprintf(
+						'<input id="%s" name="%s" type="text" value="%s"> <input class="button rational-metabox-media" id="%s_button" name="%s_button" type="button" value="Upload" />',
+						$field['id'],
+						$field['id'],
+						$db_value,
+						$field['id'],
+						$field['id']
+					);
+					break;
 				default:
 					$input = sprintf(
 						'<input id="%s" name="%s" type="%s" value="%s">',

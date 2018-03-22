@@ -14,7 +14,7 @@
 
 class WOWProjects_Our_Members_Taxonomy {
 
-	function WOWProjects_Our_Members_Taxonomy() {
+	function __construct() {
 		add_action( 'init', array($this, 'cptui_register_my_taxes') );
 	}
 

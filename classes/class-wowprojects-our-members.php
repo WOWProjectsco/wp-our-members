@@ -15,7 +15,7 @@
 
 class WOWProjects_Our_Members_Post_Type {
 
-	function WOWProjects_Our_Members_Post_Type() {
+	function __construct() {
 		add_action( 'init', array($this, 'wds_om_register_cpt') );	
 	}
 	
